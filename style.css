@@ -4,20 +4,26 @@ canvas{
   left: 0;
 }
 
-#image-overlay {
-  
-  width: 100%;
-  
+*{
+  cursor: url('./aim.png');
+}
 
-  background-image: url('./gg.png');
+
+#image-overlay {
+  position: absolute;
+  bottom: 0px;
+  left: 0;
+  width: 100vw;
+  height: 300px;
+  overflow: hidden;
   background-size: cover;
   opacity: 1;
 }
 
 #image-overlay img{
   width: 100%;
+  height: 100%;
   object-fit: cover;
-
 }
 
 #image-overlay {

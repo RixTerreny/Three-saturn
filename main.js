@@ -6,15 +6,23 @@ import{OrbitControls} from 'three/examples/jsm/controls/OrbitControls'
 
 import{FlyControls} from 'three/examples/jsm/controls/FlyControls'
 
+//setup
 const scene = new THREE.Scene();
-
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
 
+//try
+// var element = document.createElement( 'div' );
+// element.style.cursor = 'url(path/to/image.png), auto';
+// var object = new THREE.Object3D();
+// object.position.set( x, y, z );
+// object.scale.set( sX, sY, sZ );
+// object.userData.element = element;
+
 //camera
 const camera = new THREE.PerspectiveCamera( 25, window.innerWidth / window.innerHeight, 0.1, 20000 );
-camera.position.z = 3000;
+camera.position.z = 7000;
 camera.position.y = 137;
 
 //scroll
@@ -115,9 +123,8 @@ function animate() {
   torusKnot.rotation.y += 0.03;
   //cube.rotation.x += 0.002;
 
-  flyControls.movementSpeed = 5;
-  flyControls.dragToLook = true;
-  flyControls.update(0.4)
+  flyControls.movementSpeed = 7;
+  flyControls.update(1)
 //controls.update();
 
 	renderer.render( scene, camera );
