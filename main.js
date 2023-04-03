@@ -23,7 +23,7 @@ document.body.appendChild( renderer.domElement );
 //camera
 const camera = new THREE.PerspectiveCamera( 25, window.innerWidth / window.innerHeight, 0.1, 20000 );
 camera.position.z = 7000;
-camera.position.y = 137;
+camera.position.y = 1007;
 
 //scroll
 document.addEventListener( 'mousewheel', (event) => {
@@ -46,19 +46,31 @@ scene.background = spaceTexture;
 
 
 // light
-const light = new THREE.AmbientLight( 0x404040,3 ); // soft white light
-scene.add( light );
-const lightP = new THREE.PointLight( 0xffffff, 0.3 );
-lightP.position.set( -10, 400, 900 ); // position the point light
+// const light = new THREE.AmbientLight( 0x404040,3 ); // soft white light
+// scene.add( light );
+const lightP = new THREE.PointLight( 0xffffff, 3 );
+lightP.position.set( -3500, -200, 1000 ); // position the point light
 scene.add( lightP );
+const sphereSize = 50;
+const pointLightHelper = new THREE.PointLightHelper( lightP, sphereSize );
+scene.add( pointLightHelper );
 
 //controls
- //const controls = new OrbitControls(camera, renderer.domElement);
+const controls = new OrbitControls(camera, renderer.domElement);
 const flyControls = new FlyControls(camera, renderer.domElement);
+
+
+//material texture
+var loader = new THREE.TextureLoader();
+const texture = loader.load('./fire.jpg');
+texture.magFilter = THREE.NearestFilter; 
+texture.wrapS = THREE.ClampToEdgeWrapping; 
+texture.wrapT = THREE.ClampToEdgeWrapping;
+
 
 //objects
 const geometry = new THREE.SphereGeometry( 550, 60, 60);
-const material = new THREE.MeshLambertMaterial( { color: 0x000000,side: THREE.DoubleSide } );
+const material = new THREE.MeshLambertMaterial({map: texture,side: THREE.DoubleSide});
 const sphere = new THREE.Mesh( geometry, material );
 scene.add( sphere );
 
@@ -72,51 +84,62 @@ const material3 = new THREE.MeshNormalMaterial( { color: 0xffff00,} );
 const torusKnot = new THREE.Mesh( geometry3, material3 );
 scene.add( torusKnot );
 
-var loader = new THREE.TextureLoader();
-const texture = loader.load('./fire.jpg');
-texture.magFilter = THREE.NearestFilter; 
-texture.wrapS = THREE.ClampToEdgeWrapping; 
-texture.wrapT = THREE.ClampToEdgeWrapping;
 
+//rings
+const geometry1 = new THREE.RingGeometry( 800, 700, 102);
+const material1 = new THREE.MeshMatcapMaterial({color: 0x983200,side: THREE.DoubleSide});
+const ring = new THREE.Mesh( geometry1, material1 );
+ring.rotation.x = -Math.PI / 2;
+ring.rotation.y = -3;
+scene.add( ring );
 
-const geometry1 = new THREE.RingGeometry( 1500, 580, 102);
-const material1 = new THREE.MeshLambertMaterial({map: texture,side: THREE.DoubleSide});
-const cube = new THREE.Mesh( geometry1, material1 );
-cube.rotation.x = -Math.PI / 2;
-scene.add( cube );
+const geometry4 = new THREE.RingGeometry( 900, 820, 102);
+const material4 = new THREE.MeshLambertMaterial({color: 0xdc6700,side: THREE.DoubleSide});
+const ring2 = new THREE.Mesh( geometry4, material4 );
+ring2.rotation.x = -Math.PI / 2;
+ring2.rotation.y = -3;
+scene.add( ring2 );
+
+const geometry5 = new THREE.RingGeometry( 1300, 920, 102);
+const material5 = new THREE.MeshLambertMaterial({color: 0x8a3103,side: THREE.DoubleSide,alphaMap:texture});
+const ring3 = new THREE.Mesh( geometry5, material5 );
+ring3.rotation.x = -Math.PI/2;
+ring3.rotation.y = -3;
+scene.add( ring3);
 
 //core
-function createCore(){
-  const geometry3 = new THREE.BoxGeometry( 3, 5, 3);
-  const material3 = new THREE.MeshPhysicalMaterial( { color: 0x00ff00,emissive:0,roughness:0,transparent:true,opacity:0.40 } );
-  const sphere3 = new THREE.Mesh( geometry3, material3 );
-  scene.add( sphere3 );
+// function createCore(){
+//   const geometry3 = new THREE.BoxGeometry( 3, 5, 3);
+//   const material3 = new THREE.MeshPhysicalMaterial( { color: 0x00ff00,emissive:0,roughness:0,transparent:true,opacity:0.40 } );
+//   const sphere3 = new THREE.Mesh( geometry3, material3 );
+//   scene.add( sphere3 );
 
-const [x, y, z] = Array(3)
-    .fill()
-    .map(() => THREE.MathUtils.randFloatSpread(400));
+// const [x, y, z] = Array(3)
+//     .fill()
+//     .map(() => THREE.MathUtils.randFloatSpread(400));
 
-    sphere3.rotation.z += 0.01;
-  sphere3.position.set(x, y, z);
-  scene.add(sphere3);
-}
+//     sphere3.rotation.z += 0.01;
+//   sphere3.position.set(x, y, z);
+//   scene.add(sphere3);
+// }
 
-Array(3000).fill().forEach(createCore);
-
+// Array(3000).fill().forEach(createCore);
 
 
 function animate() {
 	requestAnimationFrame( animate );
 
-	sphere.rotation.y += 0.006;
-  //sphere.rotation.x += 0.002;
+	sphere.rotation.y += 0.003;
+  sphere.rotation.z += 0.0005;
 
   sphere2.rotation.y -= 0.01;
   //sphere2.rotation.x -= 0.012;
 
-	cube.rotation.z += 0.006;
-  //cube.rotation.x += 0.002;
+	ring.rotation.z += 0.006;
+  //ring.rotation.x -= 0.006;
+  //ring.rotation.y -= 0.006;
 
+  //ring2.rotation.x += 0.006;
   
 	torusKnot.rotation.z += 0.005;
   torusKnot.rotation.x -= 0.06;
@@ -124,8 +147,8 @@ function animate() {
   //cube.rotation.x += 0.002;
 
   flyControls.movementSpeed = 7;
-  flyControls.update(1)
-//controls.update();
+  // flyControls.update(1)
+controls.update();
 
 	renderer.render( scene, camera );
 }
@@ -160,6 +183,6 @@ function addStar2() {
 
 
 
-Array(6000).fill().forEach(addStar);
+Array(5000).fill().forEach(addStar);
 Array(670).fill().forEach(addStar2);
 animate();
