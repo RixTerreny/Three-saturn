@@ -46,10 +46,10 @@ scene.background = spaceTexture;
 
 
 // light
-// const light = new THREE.AmbientLight( 0x404040,3 ); // soft white light
-// scene.add( light );
-const lightP = new THREE.PointLight( 0xffffff, 3 );
-lightP.position.set( -3500, -200, 1000 ); // position the point light
+const light = new THREE.AmbientLight( 0x404040,0.5 ); // soft white light
+ scene.add( light );
+const lightP = new THREE.PointLight( 0xffffff, 1 );
+lightP.position.set( -4500, -200, 1000 ); // position the point light
 scene.add( lightP );
 const sphereSize = 50;
 const pointLightHelper = new THREE.PointLightHelper( lightP, sphereSize );
@@ -62,23 +62,28 @@ const flyControls = new FlyControls(camera, renderer.domElement);
 
 //material texture
 var loader = new THREE.TextureLoader();
-const texture = loader.load('./fire.jpg');
+const texture = loader.load('./saturn.jpg');
 texture.magFilter = THREE.NearestFilter; 
 texture.wrapS = THREE.ClampToEdgeWrapping; 
 texture.wrapT = THREE.ClampToEdgeWrapping;
 
 
-//objects
+//objects:
+//planet
 const geometry = new THREE.SphereGeometry( 550, 60, 60);
 const material = new THREE.MeshLambertMaterial({map: texture,side: THREE.DoubleSide});
 const sphere = new THREE.Mesh( geometry, material );
+sphere.rotation.x = 3;
+sphere.rotation.z = -50.5;
 scene.add( sphere );
 
+//core sphere 
 const geometry2 = new THREE.SphereGeometry( 8, 40, 30);
 const material2 = new THREE.MeshLambertMaterial( { color: 0xff0000,wireframe:true } );
 const sphere2 = new THREE.Mesh( geometry2, material2 );
 scene.add( sphere2 );
 
+//trustknot
 const geometry3 = new THREE.TorusKnotGeometry( 3, 1, 100, 170 );
 const material3 = new THREE.MeshNormalMaterial( { color: 0xffff00,} );
 const torusKnot = new THREE.Mesh( geometry3, material3 );
@@ -130,7 +135,7 @@ function animate() {
 	requestAnimationFrame( animate );
 
 	sphere.rotation.y += 0.003;
-  sphere.rotation.z += 0.0005;
+  //sphere.rotation.z += 0.0005;
 
   sphere2.rotation.y -= 0.01;
   //sphere2.rotation.x -= 0.012;
